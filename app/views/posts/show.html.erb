@@ -1,0 +1,66 @@
+# <p style="color: green"><%= notice %></p>
+
+# <%= render @post %>
+
+# <div>
+#   <%= link_to "Edit this post", edit_post_path(@post) %> |
+#   <%= link_to "Back to posts", posts_path %>
+
+#   <%= button_to "Destroy this post", @post, method: :delete %>
+# </div>
+
+
+<h1><%= @post.title %></h1>
+
+<p><%= @post.content %></p>
+
+<ul>
+  <li><%= link_to "Edit", edit_post_path(@post) %></li>
+  <li><%= link_to "Destroy", post_path(@post), data: {
+                    turbo_method: :delete,
+                    turbo_confirm: "Are you sure?"
+                  } %></li>
+</ul>
+
+<h2>Comments</h2>
+<% @post.comments.where(comment_id: nil).each do |comment| %>
+  <p>
+    <strong> main Commenter:</strong>
+    <%= comment.commenter %>
+  </p>
+
+  <p>
+    <strong>main Comment:</strong>
+    <%= comment.body %>
+  </p>
+  #box creation 
+  
+  <% comment.comments.each do |i| %>
+    <p>
+      <strong>reply Commenter:</strong>
+      <%= i.commenter %>
+    </p>
+  
+    <p>
+      <strong>reply Comment:</strong>
+      <%= i.body %>
+    </p>
+    <% end %>
+
+<% end %>
+
+
+<h2>Add a comment:</h2>
+<%= form_with model: [ @post, @post.comments.build ] do |form| %>
+  <p>
+    <%= form.label :commenter %><br>
+    <%= form.text_field :commenter %>
+  </p>
+  <p>
+    <%= form.label :body %><br>
+    <%= form.text_area :body %>
+  </p>
+  <p>
+    <%= form.submit %>
+  </p>
+<% end %>
